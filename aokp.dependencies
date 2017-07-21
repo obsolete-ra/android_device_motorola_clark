@@ -1,18 +1,26 @@
 [
   {
-    "repository": "android_device_qcom_common",
-    "target_path": "device/qcom/common"
+    "repository": "LineageOS/android_device_qcom_common",
+    "target_path": "device/qcom/common",
+	"branch":      "cm-14.1",
+    "remote": "github"
   },
   {
-    "repository": "android_kernel_motorola_msm8992",
-    "target_path": "kernel/motorola/msm8992"
+    "repository": "LineageOS/android_kernel_motorola_msm8992",
+    "target_path": "kernel/motorola/msm8992",
+	"branch":      "cm-14.1",
+    "remote": "github"
   },
   {
-    "repository": "android_hardware_sony_thermanager",
-    "target_path": "hardware/sony/thermanager"
+    "repository": "LineageOS/android_hardware_sony_thermanager",
+    "target_path": "hardware/sony/thermanager",
+	"branch":      "cm-14.1",
+    "remote": "github"
   },
   {
-    "repository": "android_packages_resources_devicesettings",
-    "target_path": "packages/resources/devicesettings"
+    "repository": "LineageOS/android_packages_resources_devicesettings",
+    "target_path": "packages/resources/devicesettings",
+	"branch":      "cm-14.1",
+    "remote": "github"
   }
 ]
