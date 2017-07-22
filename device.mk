@@ -108,8 +108,7 @@ PRODUCT_PACKAGES += \
     ueventd.qcom.rc
 
 PRODUCT_SYSTEM_PROPERTY_BLACKLIST := \
-    ro.product.model \
-    ro.product.name
+    ro.product.model
 
 # IPA Manager
 PRODUCT_PACKAGES += \
