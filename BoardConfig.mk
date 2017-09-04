@@ -159,6 +159,8 @@ BOARD_GLOBAL_CPPFLAGS += -DUSE_RIL_VERSION_11
 
 # SDClang
 TARGET_USE_SDCLANG := true
+SDCLANG_PATH := vendor/qcom/sdclang-3.8/linux-x86/bin
+SDCLANG_LTO_DEFS := device/qcom/common/sdllvm-lto-defs.mk
 
 # SELinux
 include device/qcom/sepolicy/sepolicy.mk
