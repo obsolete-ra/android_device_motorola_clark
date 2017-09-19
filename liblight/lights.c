@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#define LOG_TAG "Clark-lights"
+#include <cutils/log.h>
 #include <cutils/properties.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -24,9 +26,6 @@
 #include <pthread.h>
 #include <math.h>
 
-#define LOG_TAG "Clark-lights"
-#include <utils/Log.h>
-
 #include <sys/ioctl.h>
 #include <sys/types.h>
 
@@ -35,7 +34,7 @@
 /******************************************************************************/
 
 #define LED_LIGHT_OFF 0
-#define LED_LIGHT_ON 5
+#define LED_LIGHT_ON 255
 
 static pthread_once_t g_init = PTHREAD_ONCE_INIT;
 static pthread_mutex_t g_lock = PTHREAD_MUTEX_INITIALIZER;
@@ -78,28 +77,6 @@ write_int(char const* path, int value)
     } else {
         if (already_warned == 0) {
             ALOGE("write_int failed to open %s\n", path);
-            already_warned = 1;
-        }
-        return -errno;
-    }
-}
-
- static int
-write_str(char const* path, char *value)
-{
-    int fd;
-    static int already_warned = 0;
-
-    fd = open(path, O_RDWR);
-    if (fd >= 0) {
-        char buffer[PAGE_SIZE];
-        int bytes = sprintf(buffer, "%s\n", value);
-        int amt = write(fd, buffer, bytes);
-        close(fd);
-        return amt == -1 ? -errno : 0;
-    } else {
-        if (already_warned == 0) {
-            ALOGE("write_str failed to open %s\n", path);
             already_warned = 1;
         }
         return -errno;
@@ -245,6 +222,8 @@ static int open_lights(const struct hw_module_t* module, char const* name,
         set_light = set_light_backlight;
     else if (0 == strcmp(LIGHT_ID_NOTIFICATIONS, name))
         set_light = set_light_notifications;
+    else if (0 == strcmp(LIGHT_ID_BATTERY, name))
+        set_light = set_light_battery;
     else
         return -EINVAL;
 
