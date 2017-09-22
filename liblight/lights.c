@@ -34,7 +34,7 @@
 /******************************************************************************/
 
 #define LED_LIGHT_OFF 0
-#define LED_LIGHT_ON 255
+#define LED_LIGHT_ON 5
 
 static pthread_once_t g_init = PTHREAD_ONCE_INIT;
 static pthread_mutex_t g_lock = PTHREAD_MUTEX_INITIALIZER;
@@ -44,9 +44,6 @@ static struct light_state_t g_notification;
 
 char const*const CHARGING_LED_FILE
         = "/sys/class/leds/charging/brightness";
-
-char const*const BLINK_LED_FILE
-        = "/sys/class/leds/charging/blink";
 
 char const*const LCD_FILE
         = "/sys/class/leds/lcd-backlight/brightness";
@@ -84,28 +81,6 @@ write_int(char const* path, int value)
 }
 
 static int
-write_str(char const* path, char *value)
-{
-    int fd;
-    static int already_warned = 0;
-
-    fd = open(path, O_RDWR);
-    if (fd >= 0) {
-        char buffer[PAGE_SIZE];
-        int bytes = sprintf(buffer, "%s\n", value);
-        int amt = write(fd, buffer, bytes);
-        close(fd);
-        return amt == -1 ? -errno : 0;
-    } else {
-        if (already_warned == 0) {
-            ALOGE("write_str failed to open %s\n", path);
-            already_warned = 1;
-        }
-        return -errno;
-    }
-}
-
-static int
 is_lit(struct light_state_t const* state)
 {
     return state->color & 0x00ffffff;
@@ -135,27 +110,14 @@ static int
 set_speaker_light_locked(struct light_device_t* dev,
         struct light_state_t const* state)
 {
-    unsigned long onMS, offMS;
-    char blink_string[PAGE_SIZE];
+    int brightness_level;
 
-    if (!dev) {
-        return -1;
-    }
+    if (is_lit(state))
+        brightness_level = LED_LIGHT_ON;
+    else
+        brightness_level = LED_LIGHT_OFF;
 
-    switch (state->flashMode) {
-        case LIGHT_FLASH_TIMED:
-            onMS = state->flashOnMS;
-            offMS = state->flashOffMS;
-            break;
-        case LIGHT_FLASH_NONE:
-        default:
-            onMS = 0;
-            offMS = 0;
-            break;
-    }
-
-    sprintf(blink_string, "%lu,%lu", onMS, offMS);
-    return write_str(BLINK_LED_FILE, blink_string);
+    return write_int(CHARGING_LED_FILE, brightness_level);
 }
 
 static void
