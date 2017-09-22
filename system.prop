@@ -89,6 +89,11 @@ ro.hwui.texture_cache_flushrate=0.4
 ro.opengles.version=196610
 ro.sf.lcd_density=560
 
+# Higher fling velocities to smooth scrolling
+# and provide better responsiveness
+ro.min.fling_velocity=140
+ro.max.fling_velocity=20000
+
 # Media
 av.offload.enable=false
 media.stagefright.enable-player=true
