@@ -7,9 +7,9 @@
   },
   {
     "remote":     "gh",
-    "repository": "LineageOS/android_kernel_motorola_msm8992",
+    "repository": "obsolete-ra/android_kernel_motorola_msm8992",
     "target_path": "kernel/motorola/msm8992",
-    "revision"    : "cm-14.1"
+    "revision"    : "cr-5.1"
   },
   {
     "remote":     "gh",
