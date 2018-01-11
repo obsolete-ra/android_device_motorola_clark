@@ -153,7 +153,7 @@ TARGET_RIL_VARIANT := caf
 TARGET_USES_SDCLANG := true
 LOCAL_SDCLANG := true
 SDCLANG := true
-SDCLANG_PATH := vendor/qcom/sdclang-3.8/linux-x86/bin
+SDCLANG_PATH := vendor/qcom/sdclang-3.8/bin
 
 # SDClang LTO
 LOCAL_SDCLANG_LTO := true
