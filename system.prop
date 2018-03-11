@@ -2,6 +2,9 @@
 # System Properties for Moto X Pure
 #
 
+# Create zram disk
+ro.config.zram=true
+
 # Audio
 af.fast_track_multiplier=1
 audio_hal.period_size=192

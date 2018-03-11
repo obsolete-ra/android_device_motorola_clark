@@ -31,6 +31,7 @@ on init
 on fs
     mount_all fstab.qcom
     swapon_all fstab.qcom
+	write /proc/sys/vm/swappiness 30
 
     # use /persist as phony PDS partition
     symlink /persist /pds
