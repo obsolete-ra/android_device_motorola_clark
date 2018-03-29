@@ -20,3 +20,6 @@ PRODUCT_GMS_CLIENTID_BASE := android-motorola
 
 $(call inherit-product, device/motorola/clark/device.mk)
 $(call inherit-product-if-exists, vendor/motorola/clark/clark-vendor.mk)
+
+#Build Magisk
+DEFAULT_ROOT_METHOD := magisk
