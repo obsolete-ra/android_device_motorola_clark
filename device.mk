@@ -58,9 +58,9 @@ PRODUCT_PACKAGES += \
     Snap
 
 # CMActions
-#PRODUCT_PACKAGES += \
-#    CMActions \
-#    libjni_CMActions
+PRODUCT_PACKAGES += \
+    CMActions \
+    libjni_CMActions
 
 # Display
 PRODUCT_AAPT_CONFIG := normal

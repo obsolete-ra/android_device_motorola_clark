@@ -1,1 +1,1 @@
-add_lunch_combo carbon_clark-userdebug
+add_lunch_combo aosp_clark-userdebug

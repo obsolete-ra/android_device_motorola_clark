@@ -153,11 +153,11 @@ TARGET_RIL_VARIANT := caf
 TARGET_USES_SDCLANG := true
 LOCAL_SDCLANG := true
 SDCLANG := true
-SDCLANG_PATH := vendor/qcom/sdclang-3.8/bin
+SDCLANG_PATH := vendor/qcom/sdclang-3.8/linux-x86/bin
 
 # SDClang LTO
 LOCAL_SDCLANG_LTO := true
-SDCLANG_LTO_DEFS := vendor/carbon/sdclang/sdllvm-lto-defs.mk
+SDCLANG_LTO_DEFS := vendor/aosp/sdclang/sdllvm-lto-defs.mk
 
 # SELinux
 include device/qcom/sepolicy/sepolicy.mk
