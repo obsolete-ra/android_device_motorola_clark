@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-#define LOG_TAG "Clark-lights"
 #include <cutils/log.h>
 #include <cutils/properties.h>
 #include <stdint.h>
@@ -34,9 +33,7 @@
 /******************************************************************************/
 
 #define LED_LIGHT_OFF 0
-#define LED_LIGHT_BLINK_FAST   1
-#define LED_LIGHT_BLINK_SLOW   2
-#define LED_LIGHT_SOLID_ON     3
+#define LED_LIGHT_ON 255
 
 static pthread_once_t g_init = PTHREAD_ONCE_INIT;
 static pthread_mutex_t g_lock = PTHREAD_MUTEX_INITIALIZER;
@@ -44,8 +41,11 @@ static pthread_mutex_t g_lock = PTHREAD_MUTEX_INITIALIZER;
 static struct light_state_t g_battery;
 static struct light_state_t g_notification;
 
-char const*const LED_FILE
+char const*const CHARGING_LED_FILE
         = "/sys/class/leds/charging/brightness";
+
+char const*const BLINK_LED_FILE
+        = "/sys/class/leds/charging/blink";
 
 char const*const LCD_FILE
         = "/sys/class/leds/lcd-backlight/brightness";
@@ -82,6 +82,28 @@ write_int(char const* path, int value)
     }
 }
 
+ static int
+write_str(char const* path, char *value)
+{
+    int fd;
+    static int already_warned = 0;
+
+    fd = open(path, O_RDWR);
+    if (fd >= 0) {
+        char buffer[PAGE_SIZE];
+        int bytes = sprintf(buffer, "%s\n", value);
+        int amt = write(fd, buffer, bytes);
+        close(fd);
+        return amt == -1 ? -errno : 0;
+    } else {
+        if (already_warned == 0) {
+            ALOGE("write_str failed to open %s\n", path);
+            already_warned = 1;
+        }
+        return -errno;
+    }
+}
+
 static int
 is_lit(struct light_state_t const* state)
 {
@@ -112,14 +134,27 @@ static int
 set_speaker_light_locked(struct light_device_t* dev,
         struct light_state_t const* state)
 {
-    int brightness_level;
+    unsigned long onMS, offMS;
+    char blink_string[PAGE_SIZE];
 
-    if (is_lit(state))
-        brightness_level = LED_LIGHT_BLINK_SLOW;
-    else
-        brightness_level = LED_LIGHT_OFF;
+    if (!dev) {
+        return -1;
+    }
 
-    return write_int(LED_FILE, brightness_level);
+    switch (state->flashMode) {
+        case LIGHT_FLASH_TIMED:
+            onMS = state->flashOnMS;
+            offMS = state->flashOffMS;
+            break;
+        case LIGHT_FLASH_NONE:
+        default:
+            onMS = 0;
+            offMS = 0;
+            break;
+    }
+
+    sprintf(blink_string, "%lu,%lu", onMS, offMS);
+    return write_str(BLINK_LED_FILE, blink_string);
 }
 
 static void
@@ -148,21 +183,10 @@ static int
 set_light_notifications(struct light_device_t* dev,
         struct light_state_t const* state)
 {
-    int brightness_level;
     int err = 0;
-
-    if (!dev)
-        return -1;
-
     pthread_mutex_lock(&g_lock);
-
-    if (is_lit(state))
-        brightness_level = LED_LIGHT_BLINK_SLOW;
-    else
-        brightness_level = LED_LIGHT_OFF;
-
-    err = write_int(LED_FILE, brightness_level);
-
+    g_notification = *state;
+    handle_speaker_battery_locked(dev);
     pthread_mutex_unlock(&g_lock);
     return err;
 }
