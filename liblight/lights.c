@@ -134,7 +134,8 @@ static int
 set_speaker_light_locked(struct light_device_t* dev,
         struct light_state_t const* state)
 {
-    unsigned long onMS, offMS;
+    int onMS, offMS;
+    int brightness_level;
     char blink_string[PAGE_SIZE];
 
     if (!dev) {
@@ -153,7 +154,13 @@ set_speaker_light_locked(struct light_device_t* dev,
             break;
     }
 
-    sprintf(blink_string, "%lu,%lu", onMS, offMS);
+    if (is_lit(state))
+        brightness_level = (state->color & 0xff000000) ?
+                           (state->color & 0xff000000) >> 24 : LED_LIGHT_ON;
+    else
+        brightness_level = LED_LIGHT_OFF;
+
+    sprintf(blink_string, "%lu,%lu", brightness_level, onMS, offMS);
     return write_str(BLINK_LED_FILE, blink_string);
 }
 
