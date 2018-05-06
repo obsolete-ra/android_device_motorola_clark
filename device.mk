@@ -232,7 +232,3 @@ PRODUCT_PACKAGES += \
     libwpa_client \
     wpa_supplicant \
     wpa_supplicant.conf
-
-# Get the long list of APNs
-PRODUCT_COPY_FILES := \
-	$(LOCAL_PATH)/apns-full-conf.xml:system/etc/apns-conf.xml
