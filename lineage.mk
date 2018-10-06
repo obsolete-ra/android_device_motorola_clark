@@ -2,16 +2,17 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
-# Inherit some common AEX stuff.
-$(call inherit-product, vendor/aosp/common.mk)
+# Inherit some common Lineage stuff.
+$(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 
 # Boot animation
-TARGET_BOOT_ANIMATION_RES := 1080
+TARGET_SCREEN_HEIGHT := 1080
+TARGET_SCREEN_WIDTH := 1920
 
 DEVICE_PACKAGE_OVERLAYS += device/motorola/clark/overlay
 
 ## Device identifier. This must come after all inclusions
-PRODUCT_NAME := aosp_clark
+PRODUCT_NAME := lineage_clark
 PRODUCT_BRAND := Android
 PRODUCT_DEVICE := clark
 PRODUCT_MODEL := XT1575
@@ -20,6 +21,3 @@ PRODUCT_GMS_CLIENTID_BASE := android-motorola
 
 $(call inherit-product, device/motorola/clark/device.mk)
 $(call inherit-product-if-exists, vendor/motorola/clark/clark-vendor.mk)
-
-#Build Magisk
-DEFAULT_ROOT_METHOD := magisk

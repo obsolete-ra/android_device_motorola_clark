@@ -1,1 +1,1 @@
-add_lunch_combo aosp_clark-userdebug
+add_lunch_combo lineage_clark-userdebug
