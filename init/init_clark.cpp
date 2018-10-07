@@ -36,9 +36,6 @@
 #include "property_service.h"
 #include "vendor_init.h"
 
-using android::base::GetProperty;
-using android::init::property_set;
-
 static void setSsim(void);
 static void setMsim(void);
 
@@ -59,12 +56,12 @@ void vendor_load_properties()
     std::string sku;
     std::string car;
 
-    platform = GetProperty("ro.board.platform", "");
+    platform = android::base::GetProperty("ro.board.platform", "");
     if (platform != ANDROID_TARGET)
         return;
 
-    sku = GetProperty("ro.boot.hardware.sku", "");
-    car = GetProperty("ro.boot.carrier", "");
+    sku = android::base::GetProperty("ro.boot.hardware.sku", "");
+    car = android::base::GetProperty("ro.boot.carrier", "");
 
     property_override("ro.product.model", sku.c_str());
     property_override("ro.build.product", "clark");
