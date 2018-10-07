@@ -110,11 +110,6 @@ PRODUCT_SYSTEM_PROPERTY_BLACKLIST := \
     ro.product.model \
     ro.product.name
 
-# IPA Manager
-PRODUCT_PACKAGES += \
-    ipacm \
-    IPACM_cfg.xml
-
 # Keylayout
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl
